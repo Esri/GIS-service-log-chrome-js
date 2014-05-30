@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+
+  "name": "GIS Service Log",
+  "description": "This extension watches for network requests to GIS services (ArcGIS and WMS), and records unique URLs.",
+  "version": "0.2",
+
+  "permissions": [
+	"webRequest",
+	"*://*/*"
+  ],
+  
+  "icons": {
+    "128": "esri-half-logo-128.jpg",
+	"48": "esri-half-logo-48.png"
+  },
+  
+  "page_action": {
+    "default_icon": {
+	  "19": "esri-logo-19.png",
+	  "38": "esri-logo-38.png"
+	},
+	"default_popup": "popup.html"
+  },
+  
+  "background": {
+    "scripts": ["background.js"]
+  }
+}
