@@ -1,7 +1,14 @@
 <html>
 <head>
 </head>
-<body style="min-width:750px">
-<script type="text/javascript" src="popup.js"></script>
+<body ng-app="GISServiceLog" ng-csp style="min-width:750px">
+  <div ng-controller="GISServiceLogCtrl">
+    <h3> Detected GIS services: </h3>
+    <p ng-repeat="entry in urlLog.entries">{{entry.label()}}:
+      <a target='_blank' href='{{entry.href()}}'>{{entry.linkText()}}</a>
+    </p>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
+  <script type="text/javascript" src="popup.js"></script>
 </body>
 </html>

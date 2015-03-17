@@ -6,23 +6,25 @@
   "version": "0.2",
 
   "permissions": [
-	"webRequest",
-	"*://*/*"
+    "webRequest",
+    "*://*/*"
   ],
-  
+
   "icons": {
     "128": "esri-half-logo-128.jpg",
-	"48": "esri-half-logo-48.png"
+    "48": "esri-half-logo-48.png"
   },
-  
+
   "page_action": {
     "default_icon": {
-	  "19": "esri-logo-19.png",
-	  "38": "esri-logo-38.png"
-	},
-	"default_popup": "popup.html"
+      "19": "esri-logo-19.png",
+      "38": "esri-logo-38.png"
+    },
+    "default_popup": "popup.html"
   },
-  
+
+  "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
+
   "background": {
     "scripts": ["background.js"]
   }
