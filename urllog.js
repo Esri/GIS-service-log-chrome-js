@@ -114,7 +114,7 @@ URLLogEntry.prototype.equals = function(other) {
   to warrant subclassing URLLogEntry.ArcGIS for each type
 */
 URLLogEntry.ArcGIS = function(rawURL) {
-  var urlParts = /^(http[^\?]*\/rest\/services\/[^\?]*)\/(\w*Server)\/(.*)$/i.exec(rawURL);
+  var urlParts = /^(http[^\?]*\/rest\/services\/[^\?]*)\/(\w*Server)(.*)$/i.exec(rawURL);
   if (urlParts == null) return null;
 
   this.urlBase     = urlParts[1];
@@ -124,23 +124,24 @@ URLLogEntry.ArcGIS = function(rawURL) {
   // augment with layer information, if applicable
   switch (this.serviceType) {
     case "FeatureServer":
-      var layerId = /\d*/.exec(urlRest);
+      var layerId = /^\/(\d+)/.exec(urlRest);
       if (layerId != null) {
-        this.layerId = layerId[0];
+        this.layerId = layerId[1];
       }
       break;
 
     case "MapServer":
-      var layerId = /\d*/.exec(urlRest);
+      var layerId = /^\/(\d+)/.exec(urlRest);
       if (layerId != null) {
-        this.layerId = layerId[0];
+        this.layerId = layerId[1];
         break;
       }
-      else if (/tile/i.test(urlRest)) {
-        this.layerId = "tiles";
+      else if (/^\/tile/i.test(urlRest)) {
+        this.layerName = this.layerId = "tilemap";
         break;
       }
-      else if (/dynamicLayer/i.test(urlRest)) {
+      else if (/\/dynamicLayer/i.test(urlRest)) {
+        //TODO(bkietz) this is broken- produces incorrect href.
         var layerParams = JSON.parse(parseURLParams(rawURL).layer);
         this.layerId = "dynamicLayer:" + layerParams.id;
       }
@@ -157,9 +158,9 @@ URLLogEntry.ArcGIS = function(rawURL) {
       break;
 
     case "GlobeServer":
-      var layerId = /\d*/.exec(urlRest);
+      var layerId = /^\/(\d+)/.exec(urlRest);
       if (layerId != null) {
-        this.layerId = layerId[0];
+        this.layerId = layerId[1];
       }
       break;
   }
@@ -181,15 +182,17 @@ URLLogEntry.ArcGIS.prototype.label = function() {
 }
 
 URLLogEntry.ArcGIS.prototype.linkText = function() {
-  return this.layerName || this.layerId;
+  return this.layerName || this.layerId || this.serviceType;
 }
 
 URLLogEntry.ArcGIS.prototype.asyncFetchMeta = function($http) {
   var self = this;
   return $http
     .get(this.href() + "?f=json")
-    .then(function(res){
-      self.layerName = res.data.name;
+    .then(function(res) {
+      if (self.layerName == null) {
+        self.layerName = res.data.name;
+      }
       return self;
     });
 }

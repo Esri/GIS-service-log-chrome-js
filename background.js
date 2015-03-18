@@ -52,6 +52,7 @@ function parseServiceURL(url) {
 // use onRequestStart or something...
 chrome.webRequest.onBeforeRequest.addListener(function(info) {
   var tabId = info.tabId;
+  if (tabId < 0) return;
 
   // if this tab has not invoked a service before
   if (!(tabId in servicesByTab)) {
