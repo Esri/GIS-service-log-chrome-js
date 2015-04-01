@@ -110,7 +110,7 @@ URLLogEntry.prototype.equals = function(other) {
 /**
   ArcGIS Service log entry
 
-  TODO(bkietz) ArcGIS service URL taxonomy is diverse enough
+  TODO(bkietz, -999) ArcGIS service URL taxonomy is diverse enough
   to warrant subclassing URLLogEntry.ArcGIS for each type
 */
 URLLogEntry.ArcGIS = function(rawURL) {
@@ -173,6 +173,8 @@ URLLogEntry.ArcGIS.create = function(rawURL) {
 }
 
 URLLogEntry.ArcGIS.prototype.href = function() {
+  // ArcGIS server exposes "services directories" at parent paths of resources
+  //   http://services.arcgisonline.com/arcgis/sdk/rest/index.html#/Using_the_Services_Directory/02ss00000066000000
   return [this.urlBase, this.serviceType, this.layerId].join('/');
 }
 
@@ -218,6 +220,8 @@ URLLogEntry.WMS.create = function(rawURL) {
 }
 
 URLLogEntry.WMS.prototype.href = function() {
+  // GetCapabilities produces an XML file describing the WMS server's capabilities
+  //   http://docs.geoserver.org/stable/en/user/services/wms/reference.html
   return this.urlBase + "?service=WMS&request=GetCapabilities&layers=" + this.layers;
 }
 

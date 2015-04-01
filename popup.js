@@ -33,6 +33,11 @@ app.controller('GISServiceLogCtrl', [
         resolve(servicesByTab[tabs[0].id]);
       });
     }).then(function(rawLog) {
+      // TODO(bkietz) $scope.urlLog should probably be populated
+      //   only once then cached, with a refresh button.
+      //   (Better yet, send a message from background when new urls are available for this tab.)
+      //   Currently it is generated every time the popup is opened
+
       if (rawLog == null) return;
       console.log(rawLog);
 

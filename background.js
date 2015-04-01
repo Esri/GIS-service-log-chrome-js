@@ -16,6 +16,8 @@
 */
 
 var servicesByTab = {},
+
+    // TODO(bkietz) add tests for these
     serviceRegexes = {
     /**
       ### URL format for [ArcGIS rest API][]
